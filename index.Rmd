@@ -1,7 +1,6 @@
 ---
-title: "My Website"
+title: "Data World Bolivia es una empresa de Data Science dedicada a la obtención, análisis y visualización de datos"
 ---
 
-Hello, Website!
 
 ## Visualizaciones de datos 
