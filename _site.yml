@@ -7,6 +7,10 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - text: "Visualizaciones"
+      href: vis.html
+
+      
 output:
   html_document:
     theme: cosmo
