@@ -16,7 +16,7 @@ library(manipulate)
 data <- Quandl("ODA/MOZ_PPPSH", authcode="FiHHoC-Gnx3CHzr9385J")
 str(data)
 dplyr::glimpse(data)
-ehead(data)
+
 tail(data)
 data$year <- lubridate::year(data$Date)
 min_year <- min(data$year)
@@ -36,37 +36,4 @@ data %>%
                                     label = "Smoothing span")) %>%
   add_axis("x", title = "Date") %>%
   add_axis("y", title = "Mozambique Share of World GDP based on PPP, %")
-
-
-wd = 'env-info_hw'
-
-# set working directory for Console (vs Rmd)
-if (wd %in% list.files() & interactive()){
-  setwd(wd)
-}
-
-# ensure working directory
-if (basename(getwd()) != wd){
-  stop(sprintf("WHOAH! Your working directory is not in '%s'!\n   getwd(): %s", wd, getwd()))
-}
-
-# set default eval option for R code chunks
-#knitr::opts_chunk$set(eval=FALSE
-
-
-
-manipulate({
-  
-  faithful %>%
-    ggplot(aes(eruptions)) + 
-    geom_histogram(aes(y = ..density..),  bins = 20) +
-    geom_density(color='blue', size=2, adjust=a) +
-    xlab('duration (minutes)') +
-    ylab('frequency density') +
-    ggtitle('geyser eruption duration')
-  
-}, a = slider(min = 0, max = 2, initial = 1, label = 'bandwidth adjustment', step = 0.2))
-
-
-```
 
