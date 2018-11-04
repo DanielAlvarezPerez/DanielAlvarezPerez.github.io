@@ -3,66 +3,70 @@ title: "Visualizaciones iteractivas"
 ---
 
 Este es el citio para las visualizaciones.
-<!DOCTYPE html>
-<html>
-<head>
 
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="application/shiny-singletons"></script>
-  <script type="application/html-dependencies">json2[2014.02.04];jquery[1.12.4];shiny[1.1.0];detect-resize[0.5.3];jquery-ui[1.11.4];d3[3.5.2];vega[1.4.3];lodash[2.2.1];ggvis[0.4.4];shiny-ggvis[0.4.4];bootstrap[3.3.7]</script>
-<script src="shared/json2-min.js"></script>
-<script src="shared/jquery.min.js"></script>
-<link href="shared/shiny.css" rel="stylesheet" />
-<script src="shared/shiny.min.js"></script>
-<script src="detect-resize-0.5.3/jquery.resize.js"></script>
-<link href="jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet" />
-<script src="jquery-ui-1.11.4/jquery-ui.min.js"></script>
-<script src="d3-3.5.2/d3.min.js"></script>
-<script src="vega-1.4.3/vega.min.js"></script>
-<script src="lodash-2.2.1/lodash.min.js"></script>
-<script>var lodash = _.noConflict();</script>
-<link href="ggvis-0.4.4/css/ggvis.css" rel="stylesheet" />
-<script src="ggvis-0.4.4/js/ggvis.js"></script>
-<script src="shiny-ggvis-0.4.4/js/shiny-ggvis.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="shared/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<script src="shared/bootstrap/js/bootstrap.min.js"></script>
-<script src="shared/bootstrap/shim/html5shiv.min.js"></script>
-<script src="shared/bootstrap/shim/respond.min.js"></script>
+**Las visualizaciones son automáticas e iteractivas**
+```{r}
+library(dplyr)
+library(ggvis)
+library(lubridate)
+library(Quandl)
+library(ggplot2)
+library(manipulate) 
 
-</head>
+data <- Quandl("ODA/MOZ_PPPSH", authcode="FiHHoC-Gnx3CHzr9385J")
+str(data)
+dplyr::glimpse(data)
+ehead(data)
+tail(data)
+data$year <- lubridate::year(data$Date)
+min_year <- min(data$year)
+max_year <- max(data$year)
 
-<body>
-  <div class="container-fluid">
-    <div class="row-fluid">
-      <div class="col-sm-8 main-top">
-        <div id="plot_414336949-container" class="ggvis-output-container">
-          <div id="plot_414336949" class="ggvis-output"></div>
-          <div class="plot-gear-icon">
-            <nav class="ggvis-control">
-              <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
-              <ul class="ggvis-dropdown">
-                <li>
-                  Renderer: 
-                  <a id="plot_414336949_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_414336949" data-renderer="svg">SVG</a>
-                   | 
-                  <a id="plot_414336949_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_414336949" data-renderer="canvas">Canvas</a>
-                </li>
-                <li>
-                  <a id="plot_414336949_download" class="ggvis-download" data-plot-id="plot_414336949">Download</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-4 sidebar-bottom">
-        <form class="well well-small">
-          <div id="ggvis_controls" class="ggvis-control-output" data-plot-id="plot_414336949"></div>
-        </form>
-      </div>
-    </div>
-  </div>
-</body>
 
-</html>
+data %>% 
+  ggvis(~Date,~Value) %>% 
+  layer_points() %>% 
+  layer_model_predictions(model = input_select(
+    c("loess" = "loess",
+      "lm" = "lm",
+      "MASS::rlm" = "MASS::rlm"),
+    label = "model")) %>%
+  layer_smooths(se = TRUE,
+                span = input_slider(min = 0.3, max = 1, value = 0.8, step = 0.1,
+                                    label = "Smoothing span")) %>%
+  add_axis("x", title = "Date") %>%
+  add_axis("y", title = "Mozambique Share of World GDP based on PPP, %")
+
+
+wd = 'env-info_hw'
+
+# set working directory for Console (vs Rmd)
+if (wd %in% list.files() & interactive()){
+  setwd(wd)
+}
+
+# ensure working directory
+if (basename(getwd()) != wd){
+  stop(sprintf("WHOAH! Your working directory is not in '%s'!\n   getwd(): %s", wd, getwd()))
+}
+
+# set default eval option for R code chunks
+#knitr::opts_chunk$set(eval=FALSE
+
+
+
+manipulate({
+  
+  faithful %>%
+    ggplot(aes(eruptions)) + 
+    geom_histogram(aes(y = ..density..),  bins = 20) +
+    geom_density(color='blue', size=2, adjust=a) +
+    xlab('duration (minutes)') +
+    ylab('frequency density') +
+    ggtitle('geyser eruption duration')
+  
+}, a = slider(min = 0, max = 2, initial = 1, label = 'bandwidth adjustment', step = 0.2))
+
+
+```
+
