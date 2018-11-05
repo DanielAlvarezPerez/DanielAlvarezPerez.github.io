@@ -5,35 +5,45 @@ title: "Visualizaciones iteractivas"
 Este es el citio para las visualizaciones.
 
 **Las visualizaciones son automáticas e iteractivas**
-```{r}
+```{r echo=FALSE, include=FALSE}
+
 library(dplyr)
 library(ggvis)
 library(lubridate)
 library(Quandl)
 library(ggplot2)
 library(manipulate) 
+library(dygraphs)
+library(xts)
+library(wbstats)
+library(WDI)
+library(gdata)
+datos_clase2 <- wbcache(lang = "es")
 
-data <- Quandl("ODA/MOZ_PPPSH", authcode="FiHHoC-Gnx3CHzr9385J")
-str(data)
-dplyr::glimpse(data)
+BOLIVIA = WDI(indicator = c("NE.TRD.GNFS.ZS","BG.GSR.NFSV.GD.ZS","NV.AGR.TOTL.ZS","NV.IND.MANF.ZS","NY.GDP.MKTP.KD"),
+              country = c("BO"),
+              start = 1976, end = 2018 , extra = TRUE)
 
-tail(data)
-data$year <- lubridate::year(data$Date)
-min_year <- min(data$year)
-max_year <- max(data$year)
+BOLIVIA <-rename.vars(BOLIVIA, c("NE.TRD.GNFS.ZS","BG.GSR.NFSV.GD.ZS","NV.AGR.TOTL.ZS","NV.IND.MANF.ZS","NY.GDP.MKTP.KD"),c("COMERCIO","SERVICIOS","AGRICULTURA","INDUSTRIALIZACION","PIB"))
 
 
-data %>% 
-  ggvis(~Date,~Value) %>% 
-  layer_points() %>% 
-  layer_model_predictions(model = input_select(
-    c("loess" = "loess",
-      "lm" = "lm",
-      "MASS::rlm" = "MASS::rlm"),
-    label = "model")) %>%
-  layer_smooths(se = TRUE,
-                span = input_slider(min = 0.3, max = 1, value = 0.8, step = 0.1,
-                                    label = "Smoothing span")) %>%
-  add_axis("x", title = "Date") %>%
-  add_axis("y", title = "Mozambique Share of World GDP based on PPP, %")
+C <- (((BOLIVIA$COMERCIO/100)*BOLIVIA$PIB)/1000000)
+S <- (((BOLIVIA$SERVICIOS/100)*BOLIVIA$PIB)/1000000)
+I <- (((BOLIVIA$INDUSTRIALIZACION/100)*BOLIVIA$PIB)/1000000)
 
+x <-matrix(c(C,S,I), ncol = 3)
+colnames(x)<-c("Comercio","Servicios","Industria")
+t<- seq(as.Date('1976-01-01'),as.Date('2017-01-01'),by = "years")
+Datos <- xts(x,order.by = t)
+GRAPH1 <- cbind(Datos)
+dygraph(GRAPH1) %>% 
+  dyRangeSelector()
+
+```
+***el código puede ocultarse***
+```{r echo=FALSE}
+
+dygraph(GRAPH1, main ="Actividad Económica en Bolivia(millones de dólares)") %>% 
+  dyOptions(stackedGraph = TRUE) %>%
+  dyRangeSelector(height = 60)
+```
