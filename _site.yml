@@ -5,11 +5,17 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "Minería"
+      href: min.html
+    - text: "Análisis"
+      href: analisis.html
     - text: "Visualizaciones"
       href: vis.html
-
+    - text: "Servicios"
+      href: about.html
+    - text: "Equipo de investigación"
+      href: team.html
+      
       
 output:
   html_document:
