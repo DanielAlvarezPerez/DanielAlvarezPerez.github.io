@@ -2,4 +2,4 @@
 title: "About This Website"
 ---
 
-Este es el citio para las visualizaciones.
+Este es el sitio para las visualizaciones.

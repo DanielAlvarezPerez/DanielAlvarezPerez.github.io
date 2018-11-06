@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Balance de Pseudo Paneles</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -210,11 +210,97 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Balance de Pseudo Paneles</h1>
 
 </div>
 
 
+<p>$$           </p>
+Partiendo de un modelo Económico para el Indice de Pobreza Extrema
+<span class="math display">\[\begin{equation}
+ Y=F(YBS, YBS^2, LnTIL, Dperc) + u 
+\end{equation}\]</span>
+Se define un modelo Econométrico:
+<span class="math display">\[\begin{equation}
+{Y_{it}}={\alpha}-{\beta}{Ybs_{it}}+{\beta}{Ybs^2_{it}}-{\beta} {LnTIL_{it}}+{\beta} {Dperc_{it}}+{\nu_i}+{\omega_{it}}
+\end{equation}\]</span>
+donde  es en cociente que indica en qué medida los bonos sociales aportan a los Ingresos del Hogar que es la suma de todos los montos por bonos sociales que reciben los miembros del hogar per capita entre los ingresos del hogar per capita:
+<span class="math display">\[\begin{equation*}
+Ybs=\frac{\sum_{i=1}^{n}x_{i}=\frac{BJA + BJP + BRD}{n} }{Yhogpc}
+\end{equation*}\]</span>
+<p>Ln TIL es el logaritmo natural del número de personas que trabajan en la Institución Laboral donde 1 significa que el jefe de hogar trabaja solo, como vendedor independiente, taxista independiente,consultor independiente, etc de 2 a 20 personas representa una Empresa pequeña, de 21 a 60 una Empresa mediana y más de 60 personas una Empresa grande, la relación esperada es negativa dado que mientras más grande es la Institución Laboral existe una mejor eficiencia productiva por lo que los trabajadores estarían en mejores condiciones de vida que si la empresa fuera pequeña. Dperc es una variable dicotómica que divide a los hogares por niveles de ingresos <span class="math inline">\((Dper=F(P5=1,P10=2,P15=3,P20=4...P95=20)\)</span> Esta variable da un intercepto diferente lo que toma en cuenta que no toda la población es afectada en su nivel de pobreza por los bonos sociales o el tamaño de la institución laboral.</p>
+En el modelo <span class="math inline">\(({\nu_i}+{\omega_{it}})\)</span> es el término de error tradicional, <span class="math inline">\({\nu_i}\)</span> es el término de error para cada hogar por tanto varia para cada unidad de análisis y sería necesario estimar un <span class="math inline">\({\beta}{\nu_i}\)</span> para cada hogar por lo que es conveniente reescribir (2)como:
+<span class="math display">\[\begin{equation}
+{Y_{it}}={\alpha}-{\beta}{Ybs_{it}}+{\beta}{Ybs^2_{it}}-{\beta} {LnTIL_{it}}+{\beta} {Dperc_{it}}+{ \upsilon_{it}}
+\end{equation}\]</span>
+Donde <span class="math inline">\(({\upsilon_{it}}={\nu_i}+{\omega\textit{it}})\)</span> es un término de error compuesto que no cumple con los supuestos clásicos, aún si <span class="math inline">\(({\nu_i})\)</span> si cumple <span class="math inline">\(({\omega_{it}})\)</span> no lo hace, es por eso que este término de error compuesto tiene los siguientes supuestos:
+<span class="math display">\[\begin{equation}
+E({\omega_{it}}|X) = 0
+\end{equation}\begin{equation}
+ E({\omega_{it}} {\omega_{js}}|X)= \left\{ \begin{array}{lcc}
+             {\sigma_{\omega}^{2}} &amp;   i=j \wedge t = s \\
+             \\ 0 &amp;  i\neq j \vee t \neq s\\
+             \end{array}
+   \right.
+\end{equation}\]</span>
+El supuesto sobre <span class="math inline">\(({\nu_i})\)</span> es:
+<span class="math display">\[\begin{equation}
+ E({\nu_i}|X) = 0
+\end{equation}\begin{equation}
+ E({\nu_{i}} {\nu_{j}}|X)= \left\{ \begin{array}{lcc}
+             {\sigma_{\nu}^{2}} &amp;   i=j  \\
+             \\ 0 &amp;  i\neq j \\
+             \end{array}
+   \right.
+\end{equation}\]</span>
+Además se supone que ambos errores no están correlacionados
+<span class="math display">\[\begin{equation}
+ E({\nu_i} {\omega_{jt}}|X) = 0
+\end{equation}\]</span>
+Utilizando los supuestos del (4) al (8) se puede demostrar que el término de error tiene momentos:
+<span class="math display">\[\begin{equation}
+ E({\upsilon_{it}}|X) = 0
+\end{equation}\begin{equation}   
+   E({\upsilon_{it}} {\upsilon_{js}}|X) = \left\{ \begin{array}{lcc}
+             {\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}} &amp;  i=j \wedge t = s \\
+             \\{\sigma_{\nu}^{2}} &amp;  i= j \wedge t \neq s \\
+             \\ 0 &amp;  i \neq j 
+             \end{array}
+   \right.
+\end{equation}\]</span>
+Con lo el término de error está correlacionado dentro de cada grupo
+<span class="math display">\[\begin{equation}
+Corr({\upsilon_{it}} {\upsilon_{js}}|X) = {\rho} = \frac{{\sigma_{\nu}^{2}}}{{\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}}=\frac{{\sigma_{\nu}^{2}}}{{\sigma_{\upsilon}^{2}}}  \qquad  t \neq s
+\end{equation}\]</span>
+Esta relación se puede expresar de forma matricial como:
+<span class="math display">\[\begin{equation}
+{\sum} = {\sigma_{\upsilon}^{2}}\textbf{1}_{T}\textbf{1}_{T}^{&#39;} + {\sigma_{\upsilon}^{2}}\textbf{I}_{T]} 
+\end{equation}\begin{center}
+ ${\sum}=  \left[ \begin{tabular}{cccc}
+                ${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$&amp;${\sigma_{\nu}^{2}}$&amp;$\cdots$&amp;${\sigma_{\nu}^{2}}$\\
+${\sigma_{\nu}^{2}}$&amp;${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$&amp;$\cdots$&amp;${\sigma_{\nu}^{2}}$\\                                $\vdots$&amp;$\vdots$&amp;$\ddots$&amp;$\vdots$\\
+${\sigma_{\nu}^{2}}$&amp;${\sigma_{\nu}^{2}}$&amp;$\cdots$&amp;${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$\\                                                \end{tabular} \right].$
+         \\[20pt]
+\end{center}\]</span>
+Es la matriz de covarianza para cada hogar y
 
+Después de hacer estas aclaraciones para la estimación se opera (2) de la siguiente forma
+<span class="math display">\[\begin{equation}
+\overline{{Y_{i}}}={\alpha}-{\beta}\overline{{Ybs_{i}}}+{\beta}\overline{{Ybs^2_{i}}}-{\beta} \overline{{LnTIL_{i}}}+{\beta} \overline{{Dperc_{i}}}+{\nu_i}+\overline{\omega\textit{i}}
+\end{equation}\]</span>
+\[20pt] Donde <span class="math inline">\(\overline{{Y_{i}}}= {\sum}_t \frac{Y_{it}}{T_i}\)</span> , <span class="math inline">\(\overline{{Ybs_{i}}}= {\sum}_t \frac{Ybs_{it}}{T_i}\)</span>,<span class="math inline">\(\overline{{Ybs^2_{i}}}= {\sum}_t \frac{Ybs^2_{it}}{T_i}\)</span>,<span class="math inline">\(\overline{{LnTIL_{i}}}= {\sum}_t \frac{LnTIL_{it}}{T_i}\)</span> , <span class="math inline">\(\overline{{Dperc_{i}}}= {\sum}_t \frac{Dperc_{it}}{T_i}\)</span> Remplazando (13) en (2) se obtiene \[20pt]
+<span class="math display">\[\begin{equation}
+({Y_{it}}-\overline{{Y_{i}}})={\beta}({Ybs_{it}}-\overline{{Ybs_{i}}})+{\beta}({Ybs^2_{it}}-\overline{{Ybs^2_{i}}})-{\beta} ({LnTIL_{it}}-\overline{{LnTIL_{i}}})+{\beta} ({Dperc_{it}}-\overline{{Dperc_{i}}})+({\omega\textit{it}}-\overline{\omega\textit{i}})
+\end{equation}\]</span>
+Con esta esta última transformación se obtiene una base para poder estimar Datos de Panel sin los problemas de autocorrelación y heteroscedasticidad si aplican estimadores robustos esta última escuación es conocida como el estimador Witin cuando se aplican Efectos Fijos, el Estimador Between cuando se estima la ecuación (13) por MCO, y la estimación que se usará en esta investigación es una de Efectos Aleatorios que es una matriz weighted average que es un producida a partir los estimadores witing y between, su formalización es:
+
+<p>Donde <span class="math inline">\(\theta\)</span> es una función de <span class="math inline">\(\sigma_{\nu}^{2}\)</span> y de <span class="math inline">\(\sigma_{\omega}^{2}\)</span> .Si <span class="math inline">\(\sigma_{\nu}^{2}=0\)</span> significa que <span class="math inline">\({\nu_i}\)</span> siempre será 0 por tanto <span class="math inline">\(\theta=0\)</span> y se puede estimar por MCO directamente.</p>
+
+Si se ordenan los hogares existentes en cada Encuesta de Hogares por orden de ingreso donde 1 es el hogar con menor ingreso en cada encuesta, 2 es el segundo hogar con menos ingreso y el último dato es el hogar con mayor ingreso tendremos una Matriz de esta característica: \[20pt] \[20pt] $A = .$ \[20pt]<br />
+Esta matriz está completamente des balanceada por el tamaño de las Encuestas y se corre el riesgo de mezclar hogares con diferentes niveles de ingreso, en el 2005 el hogar 4044 es el de mayor ingreso pero su criterio de emparejamiento lo relaciona con el hogar 4044 de año 2017 el cuál es un hogar con ingresos medio bajos, el tamaño de los hogares de cada año se expresa en la siguiente Tabla
+
+<p>\[20pt] El tamaño de las Encuestas varia debido a la metodología del Muestreo que usa el INE en cada gestión, además siempre se tiende a aumentar el número de observaciones debido al crecimiento de la población si se desea un Panel completamente balanceado tendríamos que reducir el Panel a 3927 hogares perdiendo más de la mitad de la información, o aceptar trabajar con 8359 hogares a partir del año 2011 lo que tampoco es una muy buena opción debido a que el objetivo del estudio es ver cambios en el tiempo desde la aparición de los Bonos Sociales. La situación nos lleva a balancear el Panel, con un criterio de orden de percentiles, esto aparte de balancear el Panel da un mejor emparejamiento de la unidad de análisis así obtenemos la matriz B;\[20pt] $B = .$ \[20pt] Donde P5 se define como un ordenamiento de los hogares con menor ingreso hasta el valor del percentil 5 autocastico de cada muestra y el P100 se define como un ordenamiento de los hogares con más ingreso a partir del percentil 95 hasta el final de la muestra. \[20pt] $P = .$<br />
+$$</p>
 
 
 
