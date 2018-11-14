@@ -1,0 +1,61 @@
+---
+title: Simple Shiny
+output: html_document
+runtime: shiny
+---
+# Select Input
+
+```{r select-input}
+selectInput(
+  inputId='ExampleDropDown', label='Please make a selection',
+  choices=list('value 1'=1,
+               'value2' =2,
+               'value3' =3
+  )
+)
+
+```
+
+```{r print-select-input}
+renderPrint(input$ExampleDropDown)
+```
+
+# Slider Input 
+```{r slider-input}
+sliderInput(
+  inputId ='SliderExample', label = 'This is a slider',
+  min=0, max=5, value=3
+)
+
+sliderInput(
+  inputId = 'SliderExample2', label='two-ended slider',
+  min=0, max=10, value = c(4,6)
+)
+```
+# Checkbox Input 
+```{r checkbox-input}
+checkboxInput(inputId = 'CheckExample',
+              label= 'Single check box')
+checkboxGroupInput(
+  inputId = 'CheckGroupSample',
+  label='Multiple check boxes',
+  choices= list('A','B','C')
+  
+)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
