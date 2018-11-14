@@ -1,6 +1,5 @@
 ---
 title: Simple Shiny
-output: html_document
 runtime: shiny
 ---
 # Select Input
