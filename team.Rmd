@@ -1,7 +1,7 @@
 <script>
   $(document).ready(function() {
     $head = $('#header');
-    $head.prepend('<div class="knitr source"><img src="logot.png" width="220px" align="right"   ></div>')
+    $head.prepend('<div class="knitr source"><img src="DWB.png" width="220px" align="right"   ></div>')
   });
 </script>
 ---
