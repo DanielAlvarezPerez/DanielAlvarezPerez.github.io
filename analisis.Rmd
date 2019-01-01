@@ -2,6 +2,12 @@
 title: Simple Shiny
 runtime: shiny
 ---
+**Las visualizaciones son automáticas e iteractivas**
+```{r echo=FALSE, include=FALSE}
+
+library(shiny)
+```
+
 # Select Input
 
 ```{r select-input}

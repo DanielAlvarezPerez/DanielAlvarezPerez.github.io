@@ -3,3 +3,26 @@ title: "About This Website"
 ---
 
 Este es el sitio para las visualizaciones.
+
+```{r echo=FALSE, include=FALSE}
+library(shiny)
+```
+
+
+```{r}
+shinyServer(
+  pageWithSidebar(
+    headerPanel = ("My First Shiny App"),
+
+         sidebarPanel = (
+           selectInput("Distribution", "Selecione la distribucion",
+                       choices=c("Normal" "Exponential")),
+           sliderInput("TMuestra","Porfavpor seleciones un tamaño de la muestra: ",
+                       min=100, max=5000, vakue=1000, step=100)
+         ),
+    mainPanel = ("Main Panel")
+ )
+)
+
+```
+

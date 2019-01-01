@@ -9,9 +9,11 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Data World Bolivia (Departamento de Investigación DWB-DI)" />
 
+<meta name="date" content="2018-12-31" />
 
-<title>Balance de Pseudo Paneles</title>
+<title>team.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -210,97 +212,133 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Balance de Pseudo Paneles</h1>
+<h1 class="title toc-ignore">Metodología Box Jenkins para pronósticar el precio del Bitcoin</h1>
+<h4 class="author"><em>Data World Bolivia (Departamento de Investigación DWB-DI)</em></h4>
+<h4 class="date"><em>2018-12-31</em></h4>
 
 </div>
 
 
-<p>$$           </p>
-Partiendo de un modelo Económico para el Indice de Pobreza Extrema
-<span class="math display">\[\begin{equation}
- Y=F(YBS, YBS^2, LnTIL, Dperc) + u 
-\end{equation}\]</span>
-Se define un modelo Econométrico:
-<span class="math display">\[\begin{equation}
-{Y_{it}}={\alpha}-{\beta}{Ybs_{it}}+{\beta}{Ybs^2_{it}}-{\beta} {LnTIL_{it}}+{\beta} {Dperc_{it}}+{\nu_i}+{\omega_{it}}
-\end{equation}\]</span>
-donde  es en cociente que indica en qué medida los bonos sociales aportan a los Ingresos del Hogar que es la suma de todos los montos por bonos sociales que reciben los miembros del hogar per capita entre los ingresos del hogar per capita:
-<span class="math display">\[\begin{equation*}
-Ybs=\frac{\sum_{i=1}^{n}x_{i}=\frac{BJA + BJP + BRD}{n} }{Yhogpc}
-\end{equation*}\]</span>
-<p>Ln TIL es el logaritmo natural del número de personas que trabajan en la Institución Laboral donde 1 significa que el jefe de hogar trabaja solo, como vendedor independiente, taxista independiente,consultor independiente, etc de 2 a 20 personas representa una Empresa pequeña, de 21 a 60 una Empresa mediana y más de 60 personas una Empresa grande, la relación esperada es negativa dado que mientras más grande es la Institución Laboral existe una mejor eficiencia productiva por lo que los trabajadores estarían en mejores condiciones de vida que si la empresa fuera pequeña. Dperc es una variable dicotómica que divide a los hogares por niveles de ingresos <span class="math inline">\((Dper=F(P5=1,P10=2,P15=3,P20=4...P95=20)\)</span> Esta variable da un intercepto diferente lo que toma en cuenta que no toda la población es afectada en su nivel de pobreza por los bonos sociales o el tamaño de la institución laboral.</p>
-En el modelo <span class="math inline">\(({\nu_i}+{\omega_{it}})\)</span> es el término de error tradicional, <span class="math inline">\({\nu_i}\)</span> es el término de error para cada hogar por tanto varia para cada unidad de análisis y sería necesario estimar un <span class="math inline">\({\beta}{\nu_i}\)</span> para cada hogar por lo que es conveniente reescribir (2)como:
-<span class="math display">\[\begin{equation}
-{Y_{it}}={\alpha}-{\beta}{Ybs_{it}}+{\beta}{Ybs^2_{it}}-{\beta} {LnTIL_{it}}+{\beta} {Dperc_{it}}+{ \upsilon_{it}}
-\end{equation}\]</span>
-Donde <span class="math inline">\(({\upsilon_{it}}={\nu_i}+{\omega\textit{it}})\)</span> es un término de error compuesto que no cumple con los supuestos clásicos, aún si <span class="math inline">\(({\nu_i})\)</span> si cumple <span class="math inline">\(({\omega_{it}})\)</span> no lo hace, es por eso que este término de error compuesto tiene los siguientes supuestos:
-<span class="math display">\[\begin{equation}
-E({\omega_{it}}|X) = 0
-\end{equation}\begin{equation}
- E({\omega_{it}} {\omega_{js}}|X)= \left\{ \begin{array}{lcc}
-             {\sigma_{\omega}^{2}} &amp;   i=j \wedge t = s \\
-             \\ 0 &amp;  i\neq j \vee t \neq s\\
-             \end{array}
-   \right.
-\end{equation}\]</span>
-El supuesto sobre <span class="math inline">\(({\nu_i})\)</span> es:
-<span class="math display">\[\begin{equation}
- E({\nu_i}|X) = 0
-\end{equation}\begin{equation}
- E({\nu_{i}} {\nu_{j}}|X)= \left\{ \begin{array}{lcc}
-             {\sigma_{\nu}^{2}} &amp;   i=j  \\
-             \\ 0 &amp;  i\neq j \\
-             \end{array}
-   \right.
-\end{equation}\]</span>
-Además se supone que ambos errores no están correlacionados
-<span class="math display">\[\begin{equation}
- E({\nu_i} {\omega_{jt}}|X) = 0
-\end{equation}\]</span>
-Utilizando los supuestos del (4) al (8) se puede demostrar que el término de error tiene momentos:
-<span class="math display">\[\begin{equation}
- E({\upsilon_{it}}|X) = 0
-\end{equation}\begin{equation}   
-   E({\upsilon_{it}} {\upsilon_{js}}|X) = \left\{ \begin{array}{lcc}
-             {\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}} &amp;  i=j \wedge t = s \\
-             \\{\sigma_{\nu}^{2}} &amp;  i= j \wedge t \neq s \\
-             \\ 0 &amp;  i \neq j 
-             \end{array}
-   \right.
-\end{equation}\]</span>
-Con lo el término de error está correlacionado dentro de cada grupo
-<span class="math display">\[\begin{equation}
-Corr({\upsilon_{it}} {\upsilon_{js}}|X) = {\rho} = \frac{{\sigma_{\nu}^{2}}}{{\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}}=\frac{{\sigma_{\nu}^{2}}}{{\sigma_{\upsilon}^{2}}}  \qquad  t \neq s
-\end{equation}\]</span>
-Esta relación se puede expresar de forma matricial como:
-<span class="math display">\[\begin{equation}
-{\sum} = {\sigma_{\upsilon}^{2}}\textbf{1}_{T}\textbf{1}_{T}^{&#39;} + {\sigma_{\upsilon}^{2}}\textbf{I}_{T]} 
-\end{equation}\begin{center}
- ${\sum}=  \left[ \begin{tabular}{cccc}
-                ${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$&amp;${\sigma_{\nu}^{2}}$&amp;$\cdots$&amp;${\sigma_{\nu}^{2}}$\\
-${\sigma_{\nu}^{2}}$&amp;${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$&amp;$\cdots$&amp;${\sigma_{\nu}^{2}}$\\                                $\vdots$&amp;$\vdots$&amp;$\ddots$&amp;$\vdots$\\
-${\sigma_{\nu}^{2}}$&amp;${\sigma_{\nu}^{2}}$&amp;$\cdots$&amp;${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$\\                                                \end{tabular} \right].$
-         \\[20pt]
-\end{center}\]</span>
-Es la matriz de covarianza para cada hogar y
-
-Después de hacer estas aclaraciones para la estimación se opera (2) de la siguiente forma
-<span class="math display">\[\begin{equation}
-\overline{{Y_{i}}}={\alpha}-{\beta}\overline{{Ybs_{i}}}+{\beta}\overline{{Ybs^2_{i}}}-{\beta} \overline{{LnTIL_{i}}}+{\beta} \overline{{Dperc_{i}}}+{\nu_i}+\overline{\omega\textit{i}}
-\end{equation}\]</span>
-\[20pt] Donde <span class="math inline">\(\overline{{Y_{i}}}= {\sum}_t \frac{Y_{it}}{T_i}\)</span> , <span class="math inline">\(\overline{{Ybs_{i}}}= {\sum}_t \frac{Ybs_{it}}{T_i}\)</span>,<span class="math inline">\(\overline{{Ybs^2_{i}}}= {\sum}_t \frac{Ybs^2_{it}}{T_i}\)</span>,<span class="math inline">\(\overline{{LnTIL_{i}}}= {\sum}_t \frac{LnTIL_{it}}{T_i}\)</span> , <span class="math inline">\(\overline{{Dperc_{i}}}= {\sum}_t \frac{Dperc_{it}}{T_i}\)</span> Remplazando (13) en (2) se obtiene \[20pt]
-<span class="math display">\[\begin{equation}
-({Y_{it}}-\overline{{Y_{i}}})={\beta}({Ybs_{it}}-\overline{{Ybs_{i}}})+{\beta}({Ybs^2_{it}}-\overline{{Ybs^2_{i}}})-{\beta} ({LnTIL_{it}}-\overline{{LnTIL_{i}}})+{\beta} ({Dperc_{it}}-\overline{{Dperc_{i}}})+({\omega\textit{it}}-\overline{\omega\textit{i}})
-\end{equation}\]</span>
-Con esta esta última transformación se obtiene una base para poder estimar Datos de Panel sin los problemas de autocorrelación y heteroscedasticidad si aplican estimadores robustos esta última escuación es conocida como el estimador Witin cuando se aplican Efectos Fijos, el Estimador Between cuando se estima la ecuación (13) por MCO, y la estimación que se usará en esta investigación es una de Efectos Aleatorios que es una matriz weighted average que es un producida a partir los estimadores witing y between, su formalización es:
-
-<p>Donde <span class="math inline">\(\theta\)</span> es una función de <span class="math inline">\(\sigma_{\nu}^{2}\)</span> y de <span class="math inline">\(\sigma_{\omega}^{2}\)</span> .Si <span class="math inline">\(\sigma_{\nu}^{2}=0\)</span> significa que <span class="math inline">\({\nu_i}\)</span> siempre será 0 por tanto <span class="math inline">\(\theta=0\)</span> y se puede estimar por MCO directamente.</p>
-
-Si se ordenan los hogares existentes en cada Encuesta de Hogares por orden de ingreso donde 1 es el hogar con menor ingreso en cada encuesta, 2 es el segundo hogar con menos ingreso y el último dato es el hogar con mayor ingreso tendremos una Matriz de esta característica: \[20pt] \[20pt] $A = .$ \[20pt]<br />
-Esta matriz está completamente des balanceada por el tamaño de las Encuestas y se corre el riesgo de mezclar hogares con diferentes niveles de ingreso, en el 2005 el hogar 4044 es el de mayor ingreso pero su criterio de emparejamiento lo relaciona con el hogar 4044 de año 2017 el cuál es un hogar con ingresos medio bajos, el tamaño de los hogares de cada año se expresa en la siguiente Tabla
-
-<p>\[20pt] El tamaño de las Encuestas varia debido a la metodología del Muestreo que usa el INE en cada gestión, además siempre se tiende a aumentar el número de observaciones debido al crecimiento de la población si se desea un Panel completamente balanceado tendríamos que reducir el Panel a 3927 hogares perdiendo más de la mitad de la información, o aceptar trabajar con 8359 hogares a partir del año 2011 lo que tampoco es una muy buena opción debido a que el objetivo del estudio es ver cambios en el tiempo desde la aparición de los Bonos Sociales. La situación nos lleva a balancear el Panel, con un criterio de orden de percentiles, esto aparte de balancear el Panel da un mejor emparejamiento de la unidad de análisis así obtenemos la matriz B;\[20pt] $B = .$ \[20pt] Donde P5 se define como un ordenamiento de los hogares con menor ingreso hasta el valor del percentil 5 autocastico de cada muestra y el P100 se define como un ordenamiento de los hogares con más ingreso a partir del percentil 95 hasta el final de la muestra. \[20pt] $P = .$<br />
-$$</p>
+<script>
+  $(document).ready(function() {
+    $head = $('#header');
+    $head.prepend('<div class="knitr source"><img src="logot.png" width="220px" align="right"   ></div>')
+  });
+</script>
+<p>Los modelos de series de tiempo univariados son regresiones de una variable en función a su propio pasado, la cuestión es poder identificar los rezagos adecuados de la variable identificando momentos del pasado que explican mejor a la variable: <span class="math inline">\(Y_{t} = a_{0} + a_{1}Y_{t-1} + a_{2}Y_{t-2} + \epsilon_{t}\)</span></p>
+<div id="mineria-de-datos" class="section level2">
+<h2>Mineria de Datos</h2>
+<p>Muchos lenguajes de programación como <code>R</code>,<code>Python</code> y programas estadísticos como <code>Stata</code> nos permiten escribir codigo para poder obtener muchas bases de datos en tiempo real de variables financieras, precios de materias primas, tipos de cambio, variables macroeconómicas.</p>
+</div>
+<div id="base-de-datos-bitcoin-2018" class="section level2">
+<h2>Base de Datos Bitcoin 2018</h2>
+<p>En el caso de utilizar <code>R</code> para poder minar datos del <code>Bitcoin</code> en el 2018 debes escribir el siguiente código :</p>
+<pre><code>library(quantmod) 
+  getSymbols(&quot;BTCUSD=X&quot;,src=&quot;yahoo&quot;,from = &quot;2018-01-01&quot;, 
+       to = Sys.Date())
+       </code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">BTCUSD=X.Open</th>
+<th align="right">BTCUSD=X.High</th>
+<th align="right">BTCUSD=X.Low</th>
+<th align="right">BTCUSD=X.Close</th>
+<th align="right">BTCUSD=X.Adjusted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">13850.49</td>
+<td align="right">12877.67</td>
+<td align="right">13921.53</td>
+<td align="right">13444.87</td>
+<td align="right">13444.87</td>
+</tr>
+<tr class="even">
+<td align="right">13444.87</td>
+<td align="right">12934.17</td>
+<td align="right">15306.13</td>
+<td align="right">14754.14</td>
+<td align="right">14754.14</td>
+</tr>
+<tr class="odd">
+<td align="right">14754.09</td>
+<td align="right">14579.70</td>
+<td align="right">15435.01</td>
+<td align="right">15156.61</td>
+<td align="right">15156.61</td>
+</tr>
+<tr class="even">
+<td align="right">15156.50</td>
+<td align="right">14244.67</td>
+<td align="right">15408.65</td>
+<td align="right">15180.08</td>
+<td align="right">15180.08</td>
+</tr>
+<tr class="odd">
+<td align="right">15180.08</td>
+<td align="right">14832.35</td>
+<td align="right">17126.95</td>
+<td align="right">16954.79</td>
+<td align="right">16954.79</td>
+</tr>
+<tr class="even">
+<td align="right">16228.26</td>
+<td align="right">13902.31</td>
+<td align="right">16302.92</td>
+<td align="right">14976.18</td>
+<td align="right">14976.18</td>
+</tr>
+<tr class="odd">
+<td align="right">14976.18</td>
+<td align="right">14221.55</td>
+<td align="right">15390.27</td>
+<td align="right">14468.49</td>
+<td align="right">14468.49</td>
+</tr>
+<tr class="even">
+<td align="right">14468.09</td>
+<td align="right">13450.53</td>
+<td align="right">14919.50</td>
+<td align="right">14919.50</td>
+<td align="right">14919.50</td>
+</tr>
+<tr class="odd">
+<td align="right">14920.36</td>
+<td align="right">12825.96</td>
+<td align="right">14979.95</td>
+<td align="right">13308.07</td>
+<td align="right">13308.07</td>
+</tr>
+<tr class="even">
+<td align="right">13308.07</td>
+<td align="right">12851.92</td>
+<td align="right">14129.08</td>
+<td align="right">13841.19</td>
+<td align="right">13841.19</td>
+</tr>
+</tbody>
+</table>
+<p>Una correcta visualización de los datos nos permite conocer todo el comportamiento de la variable. Este año el bitcoin sufrió una caída constante.</p>
+<pre class="r"><code>chartSeries(na.locf(`BTCUSD=X`), theme=&quot;white&quot;,TA=&quot;addVo();addBBands();addCCI()&quot;)</code></pre>
+<p><img src="team_files/figure-html/unnamed-chunk-3-1.png" width="1344" /></p>
+<p>El bitcoin tuvo una cotizacióin de casi 20.000 $ a inicios del 2018 y cierra el año con un promedio de 3.700$ .La revolución financiera que significa el bitcoin está en sus precios mínimo, es importante pronosticar el comportamiento de esta criptomoneda constantemente, para eso se utilizará un modelo de Series de Tiempo Univariado llamado <code>ARIMA</code> que para una correcta aplicación sigue los pasos de una metodología de 5 pasos <code>Metodología Box Jenkins</code></p>
+<ul>
+<li>Pruebas de raíz unitarias</li>
+<li>Identifiación del orden AR() I() MA() con la ayuda de las funciones de Auto-Correlación y Auto-Correlación Parcial</li>
+<li>Estimación de un modelo ARIMA significativo</li>
+<li>Pruebas de ruido blanco en los residuos</li>
+<li>Pronosticar</li>
+</ul>
+<pre><code>#&gt; Warning: package &#39;timeSeries&#39; was built under R version 3.5.2</code></pre>
+<p><img src="team_files/figure-html/unnamed-chunk-5-1.png" width="1344" /> ##Pronóstico para los siguientes 30 días <img src="team_files/figure-html/unnamed-chunk-6-1.png" width="1344" /></p>
+</div>
+<div id="aprende-practicando-con-nuestros-cursos" class="section level2">
+<h2>Aprende practicando con nuestros cursos:</h2>
+<p><a href="https://drive.google.com/open?id=19OeeZMSIreqyoBLNg9LUZjPqHlGXQT3H">Curso de Estadística Aplicada con R</a></p>
+<p><a href="https://drive.google.com/open?id=1HQcUqaUXjkWZsrAg-4M7XOpzfoSBgnsN">Curso de Pronósticos en Series Temporales</a></p>
+</div>
 
 
 

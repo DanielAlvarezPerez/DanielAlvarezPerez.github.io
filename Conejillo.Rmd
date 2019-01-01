@@ -1,0 +1,10 @@
+---
+title: "MWE"
+output: html_document
+header-includes:
+   - \usepackage{mathtools}
+---
+
+## Use "Defined by" Symbol
+
+$$sin(x) \coloneqq \frac{opposite}{hypothenuse}$$

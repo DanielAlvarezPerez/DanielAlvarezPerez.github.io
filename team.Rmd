@@ -1,191 +1,98 @@
+<script>
+  $(document).ready(function() {
+    $head = $('#header');
+    $head.prepend('<div class="knitr source"><img src="logot.png" width="220px" align="right"   ></div>')
+  });
+</script>
 ---
-title: "Balance de Pseudo Paneles"
+title: "Metodología Box Jenkins para pronósticar el precio del Bitcoin"
+author: "Data World Bolivia (Departamento de Investigación DWB-DI) "
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: 
+  \VignetteIndexEntry{Vignette Title}
+  \VignetteEngine{knitr::rmarkdown}
+  \VignetteEncoding{UTF-20}
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Los modelos de series de tiempo univariados son regresiones de una variable en función a su propio pasado, la cuestión es poder identificar los rezagos adecuados de la variable identificando momentos del pasado que explican mejor a la variable: $Y_{t} = a_{0} + a_{1}Y_{t-1}  + a_{2}Y_{t-2} + \epsilon_{t}$
+
+## Mineria de Datos
+Muchos lenguajes de programación como `R`,`Python` y programas estadísticos como `Stata` nos permiten escribir codigo para poder obtener muchas bases de datos en tiempo real de variables financieras, precios de materias primas, tipos de cambio, variables macroeconómicas. 
 
 
-$$
-\usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{array,tabularx}
-\usepackage{float}
-\usepackage[left=2c	m,right=2cm,top=2cm,bottom=2cm]{geometry}
-\usepackage{graphicx,epsf,subfigure}
-\usepackage{amsthm,amssymb,amsmath}
-\textbf{2. Modelo de Efectos Fijos y Aleatorios para un Pseudo Panel}
+## Base de Datos Bitcoin 2018 
 
-Partiendo de un modelo Económico para el Indice de Pobreza Extrema 
-\begin{equation}
- Y=F(YBS, YBS^2, LnTIL, Dperc) + u 
-\end{equation}
-Se define un modelo Econométrico: 
-\begin{equation}
-{Y_{it}}={\alpha}-{\beta}{Ybs_{it}}+{\beta}{Ybs^2_{it}}-{\beta} {LnTIL_{it}}+{\beta} {Dperc_{it}}+{\nu_i}+{\omega_{it}}
-\end{equation}
-donde  \textit{Ybs} es en cociente que indica en qué medida los bonos sociales aportan a los Ingresos del Hogar que es la suma de todos los montos por bonos sociales que reciben los miembros del hogar per capita entre los ingresos del hogar per capita: 
-\begin{equation*}
-Ybs=\frac{\sum_{i=1}^{n}x_{i}=\frac{BJA + BJP + BRD}{n} }{Yhogpc}
-\end{equation*}
-Ln TIL es el logaritmo natural del número de personas que trabajan en la Institución Laboral donde 1 significa que el jefe de hogar trabaja solo, como vendedor independiente, taxista independiente,consultor independiente, etc  de 2 a 20 personas representa una Empresa pequeña, de 21 a 60 una Empresa mediana y más de 60 personas una Empresa grande, la relación esperada es negativa dado que mientras más grande es la Institución Laboral existe una mejor eficiencia productiva por lo que los trabajadores estarían en mejores condiciones de vida que si la empresa fuera pequeña. 
-Dperc es una variable dicotómica que divide a los hogares por niveles de ingresos $(Dper=F(P5=1,P10=2,P15=3,P20=4...P95=20)$ Esta variable da un intercepto diferente lo que toma en cuenta que no toda la población es afectada en su nivel de pobreza por los bonos sociales o el tamaño de la institución laboral.
+En el caso de utilizar `R` para poder minar datos del `Bitcoin` en el 2018 debes escribir el siguiente código :
 
-En el modelo $({\nu_i}+{\omega_{it}})$ es el término de error tradicional, ${\nu_i}$ es el término de error para cada hogar por tanto varia para cada unidad de análisis y sería necesario estimar un ${\beta}{\nu_i}$ para cada hogar por lo que es conveniente reescribir (2)como: 
-\begin{equation}
-{Y_{it}}={\alpha}-{\beta}{Ybs_{it}}+{\beta}{Ybs^2_{it}}-{\beta} {LnTIL_{it}}+{\beta} {Dperc_{it}}+{ \upsilon_{it}}
-\end{equation}
+    library(quantmod) 
+      getSymbols("BTCUSD=X",src="yahoo",from = "2018-01-01", 
+           to = Sys.Date())
+           
+```{r echo=F, message=FALSE, results='hide'}
+library(quantmod) 
+      getSymbols("BTCUSD=X",src="yahoo",from = "2018-01-01", 
+           to = Sys.Date())
+head(`BTCUSD=X`, 10)
+datable<-`BTCUSD=X`[,-5]
 
-Donde $({\upsilon_{it}}={\nu_i}+{\omega\textit{it}})$ es un término de error compuesto que no cumple con los supuestos clásicos, aún si $({\nu_i})$ si cumple  $({\omega_{it}})$ no lo hace, es por eso que este término de error compuesto tiene los siguientes supuestos:
-\begin{equation}
-E({\omega_{it}}|X) = 0
-\end{equation} 
-\begin{equation}
- E({\omega_{it}} {\omega_{js}}|X)= \left\{ \begin{array}{lcc}
-             {\sigma_{\omega}^{2}} &   i=j \wedge t = s \\
-             \\ 0 &  i\neq j \vee t \neq s\\
-             \end{array}
-   \right.
-\end{equation} 
-El supuesto sobre $({\nu_i})$ es: 
-\begin{equation}
- E({\nu_i}|X) = 0
-\end{equation}
-\begin{equation}
- E({\nu_{i}} {\nu_{j}}|X)= \left\{ \begin{array}{lcc}
-             {\sigma_{\nu}^{2}} &   i=j  \\
-             \\ 0 &  i\neq j \\
-             \end{array}
-   \right.
-\end{equation}
-Además se supone que ambos errores no están correlacionados 
-\begin{equation}
- E({\nu_i} {\omega_{jt}}|X) = 0
-\end{equation}
-Utilizando los supuestos del (4) al (8) se puede demostrar que el término de error tiene momentos:
-\begin{equation}
- E({\upsilon_{it}}|X) = 0
-\end{equation}
-\begin{equation}   
-   E({\upsilon_{it}} {\upsilon_{js}}|X) = \left\{ \begin{array}{lcc}
-             {\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}} &  i=j \wedge t = s \\
-             \\{\sigma_{\nu}^{2}} &  i= j \wedge t \neq s \\
-             \\ 0 &  i \neq j 
-             \end{array}
-   \right.
-\end{equation}
-Con lo el término de error está correlacionado dentro de cada grupo 
-\begin{equation}
-Corr({\upsilon_{it}} {\upsilon_{js}}|X) = {\rho} = \frac{{\sigma_{\nu}^{2}}}{{\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}}=\frac{{\sigma_{\nu}^{2}}}{{\sigma_{\upsilon}^{2}}}  \qquad  t \neq s
-\end{equation}
-Esta relación se puede expresar de forma matricial como: 
-\begin{equation}
-{\sum} = {\sigma_{\upsilon}^{2}}\textbf{1}_{T}\textbf{1}_{T}^{'} + {\sigma_{\upsilon}^{2}}\textbf{I}_{T]} 
-\end{equation}
-\begin{center}
- ${\sum}=  \left[ \begin{tabular}{cccc}
-                ${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$&${\sigma_{\nu}^{2}}$&$\cdots$&${\sigma_{\nu}^{2}}$\\
-${\sigma_{\nu}^{2}}$&${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$&$\cdots$&${\sigma_{\nu}^{2}}$\\                                $\vdots$&$\vdots$&$\ddots$&$\vdots$\\
-${\sigma_{\nu}^{2}}$&${\sigma_{\nu}^{2}}$&$\cdots$&${\sigma_{\nu}^{2}}+{\sigma_{\omega}^{2}}$\\                                                \end{tabular} \right].$
-         \\[20pt]
-\end{center}
-Es la matriz de covarianza para cada hogar y 
-\begin{center}
- ${\Omega}=  \left[ \begin{tabular}{cccc}
-                ${\sum}$&$0$&$\cdots$&$0$\\
-$0$&${\sum}$&$\cdots$&$0$\\      
-           $\vdots$&$\vdots$&$\ddots$&$\vdots$\\
-$0$&$0$&$\cdots$&${\sum}$\\                                                \end{tabular} \right].$
-         \\[20pt]
-\end{center}
-Después de hacer estas aclaraciones para la estimación se opera (2) de la siguiente forma 
-\begin{equation}
-\overline{{Y_{i}}}={\alpha}-{\beta}\overline{{Ybs_{i}}}+{\beta}\overline{{Ybs^2_{i}}}-{\beta} \overline{{LnTIL_{i}}}+{\beta} \overline{{Dperc_{i}}}+{\nu_i}+\overline{\omega\textit{i}}
-\end{equation}
-         \\[20pt]
-Donde $\overline{{Y_{i}}}= {\sum}_t \frac{Y_{it}}{T_i}$ , $\overline{{Ybs_{i}}}= {\sum}_t \frac{Ybs_{it}}{T_i}$,$\overline{{Ybs^2_{i}}}= {\sum}_t \frac{Ybs^2_{it}}{T_i}$,$\overline{{LnTIL_{i}}}= {\sum}_t \frac{LnTIL_{it}}{T_i}$ , $\overline{{Dperc_{i}}}= {\sum}_t \frac{Dperc_{it}}{T_i}$
-Remplazando (13) en (2) se obtiene 
-         \\[20pt]
-\begin{equation}
-({Y_{it}}-\overline{{Y_{i}}})={\beta}({Ybs_{it}}-\overline{{Ybs_{i}}})+{\beta}({Ybs^2_{it}}-\overline{{Ybs^2_{i}}})-{\beta} ({LnTIL_{it}}-\overline{{LnTIL_{i}}})+{\beta} ({Dperc_{it}}-\overline{{Dperc_{i}}})+({\omega\textit{it}}-\overline{\omega\textit{i}})
-\end{equation}
-Con esta esta última transformación se obtiene una base para poder estimar Datos de Panel sin los problemas de autocorrelación y heteroscedasticidad si aplican estimadores robustos esta última escuación es conocida como el estimador Witin cuando se aplican Efectos Fijos, el Estimador Between cuando se estima la ecuación (13) por MCO, y la estimación que se usará en esta investigación es una de Efectos Aleatorios que es una matriz weighted average que es un producida a partir los estimadores witing y between, su formalización es: 
-\begin{center}
-\begin{eqnarray}
-({Y_{it}}-\theta\overline{{Y_{i}}})=(1-\theta)\alpha +{\beta}({Ybs_{it}}-\theta\overline{{Ybs_{i}}})+{\beta}({Ybs^2_{it}}-\theta \overline{{Ybs^2_{i}}})\nonumber\\-{\beta} ({LnTIL_{it}}-\theta\overline{{LnTIL_{i}}})
-+{\beta} ({Dperc_{it}}-\theta\overline{{Dperc_{i}}})+\{(1-\theta){\nu_i}+{\omega\textit{it}}-\theta\overline{\omega\textit{i}}\}
-\end{eqnarray}
-\end{center}
-Donde $\theta$ es una función de $\sigma_{\nu}^{2}$ y de $\sigma_{\omega}^{2}$ .Si $\sigma_{\nu}^{2}=0$ significa que ${\nu_i}$ siempre será 0 por tanto $\theta=0$ y se puede estimar por MCO directamente. 
+```
 
 
-\textbf{3.  Criterio de emparejamiento}
+```{r echo=F}
+knitr::kable(head(datable, 10))
+
+```
 
 
-Si se ordenan los hogares existentes en cada Encuesta de Hogares por orden de ingreso donde 1 es el hogar con menor ingreso en cada encuesta, 2 es el segundo hogar con menos ingreso y el último dato es el hogar con mayor ingreso tendremos una Matriz de esta característica: \\[20pt]
-\\[20pt]
-         $A =  \left[ \begin{tabular}{cccccc}
-                $h_{1,2005}$&$h_{1,2006}$&$\cdots$&$h_{1,2012}$&$\cdots$&$h_{1,2017}$\\
-                $h_{2,2005}$&$h_{2,2006}$&$\cdots$&$h_{2,2012}$&$\cdots$&$h_{2,2017}$\\
-                $\vdots$&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $h_{4044,2005}$&$h_{4044,2006}$&$\cdots$&$h_{4044,2012}$&$\cdots$&$h_{4044,2017}$\\
-                $ $&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$h_{4079,2006}$&$\cdots$&$h_{4079,2012}$&$\cdots$&$h_{4079,2017}$\\
-                $ $&$ $&$ $&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$ $&$ $&$h_{8359,2012}$&$\cdots$&$h_{8359,2017}$\\
-                $ $&$ $&$ $&$ $&$ $&$\vdots$\\
-                $ $&$ $&$ $&$ $&$ $&$h_{10992,2017}$
-                \end{tabular} \right].$
-         \\[20pt]         
-Esta matriz está completamente des balanceada por el tamaño de las Encuestas y se corre el riesgo de mezclar hogares con diferentes niveles de ingreso, en el 2005 el hogar 4044 es el de mayor ingreso pero su criterio de emparejamiento lo relaciona con el hogar 4044 de año 2017 el cuál es un hogar con ingresos medio bajos, el tamaño de los hogares de cada año se expresa en la siguiente Tabla 
- \begin{table}[htbp]
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline
-\textbf{Año} &\textbf{$2005$} &\textbf{$2006$} &\textbf{$2008$} &\textbf{$2009$} &\textbf{$2011$} &\textbf{$2012$} &\textbf{$2013$} &\textbf{$2014$} &\textbf{$2015$}&\textbf{$2016$}&\textbf{$2017$}\\\hline 
-Nº de hogares & 4044 & 4079 & 3927 & 4010 & 8816 & 8359 & 9508 & 9799 & 10145 & 10945 &10992 \\ \hline
-\end{tabular}
-\caption{Número de hogares en las Encuestas de Hogares Bolivia (2005-2016).}
-\end{center}
-\end{table}
-\\[20pt]
-El tamaño de las Encuestas varia debido a la metodología del Muestreo que usa el INE en cada gestión, además siempre se tiende a aumentar el número de observaciones debido al crecimiento de la población si 
-se desea un Panel completamente balanceado tendríamos que reducir el Panel a 3927 hogares perdiendo más de la mitad de la información, o aceptar trabajar con 8359 hogares a partir del año 2011 lo que tampoco es una muy buena opción debido a que el objetivo del estudio es ver cambios en el tiempo desde la aparición de los Bonos Sociales. 
-La situación nos lleva a balancear el Panel, con un criterio de orden de percentiles, esto aparte de balancear el Panel da un mejor emparejamiento de la unidad de análisis así obtenemos la matriz B;\\[20pt] 
- $B =  \left[ \begin{tabular}{cccccc}
-                $P_{5,2005}$&$P_{5,2006}$&$\cdots$&$P_{5,2012}$&$\cdots$&$P_{5,2016}$\\
-                $P_{10,2005}$&$P_{10,2006}$&$\cdots$&$P_{10,2012}$&$\cdots$&$P_{10,2016}$\\
-                $P_{15,2005}$&$P_{15,2006}$&$\cdots$&$P_{15,2012}$&$\cdots$&$P_{15,2016}$\\
-                $\vdots$&$\vdots$&$\vdots$&$\vdots$&$\ddots$&$\vdots$\\
-                $P_{100,2005}$&$P_{100,2006}$&$\cdots$&$P_{100,2012}$&$\cdots$&$P_{100,2016}$
-                \end{tabular} \right].$
-         \\[20pt]
-Donde P5 se define como un ordenamiento de los hogares con menor ingreso hasta el valor del percentil 5 autocastico de cada muestra y el P100 se define como un ordenamiento de los hogares con más ingreso a partir del percentil 95 hasta el final de la muestra. 
-         \\[20pt]
- $P =  \left[ \begin{tabular}{ccccccccccccc}
-                $p_{5.1,2005}$&$p_{5.1,2006}$&$\cdots$&$p_{5.1,2012}$&$\cdots$&$p_{5.1,2016}$\\
-                $p_{5.2,2005}$&$p_{5.2,2006}$&$\cdots$&$p_{5.2,2012}$&$\cdots$&$p_{5.2,2016}$\\
-                $\vdots$&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $p_{5.f1,2005}$&$p_{5.f1,2006}$&$\cdots$&$p_{5.f1,2012}$&$\cdots$&$p_{5.f1,2016}$\\
-                $ $&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$p_{5.f2,2006}$&$\cdots$&$p_{5.f2,2012}$&$\cdots$&$p_{5.f2,2016}$\\
-                $ $&$ $&$ $&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$ $&$ $&$p_{5.f6,2012}$&$\cdots$&$p_{5.f6,2016}$\\
-                $ $&$ $&$ $&$ $&$ $&$\vdots$\\
-                $ $&$ $&$ $&$ $&$ $&$p_{5.f10,2016}$\\
-                $\vdots$&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $p_{10.1,2005}$&$p_{10.1,2006}$&$\cdots$&$p_{10.1,2012}$&$\cdots$&$p_{10.1,2016}$\\
-                $p_{10.2,2005}$&$p_{10.2,2006}$&$\cdots$&$p_{10.2,2012}$&$\cdots$&$p_{10.2,2016}$\\
-                $\vdots$&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $p_{10.f1,2005}$&$p_{10.f1,2006}$&$\cdots$&$p_{10.f1,2012}$&$\cdots$&$p_{10.f1,2016}$\\
-                $ $&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$p_{10.f2,2006}$&$\cdots$&$p_{10.f2,2012}$&$\cdots$&$p_{10.f2,2016}$\\
-                $ $&$ $&$ $&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$ $&$ $&$p_{10.f6,2012}$&$\cdots$&$p_{10.f6,2016}$\\
-                $ $&$ $&$ $&$ $&$ $&$\vdots$\\
-                $ $&$ $&$ $&$ $&$ $&$p_{10.f10,2016}$\\
-                $\vdots$&$\vdots$&$\vdots$&$\vdots$&$\cdots$&$\vdots$\\
-                $ $&$ $&$ $&$ $&$ $&$p_{100.f10,2016}$
-                \end{tabular} \right].$  
-$$
+Una correcta visualización de los datos nos permite conocer todo el comportamiento de la variable. 
+Este año el bitcoin sufrió una caída constante.
+
+```{r, fig.show='hold',fig.width=14, fig.height=10}
+chartSeries(na.locf(`BTCUSD=X`), theme="white",TA="addVo();addBBands();addCCI()")
+```
+
+El bitcoin tuvo una cotizacióin de casi 20.000 \$ a inicios del 2018 y cierra el año con un promedio de 3.700\$ .La revolución financiera que significa el bitcoin está en sus precios mínimo, es importante pronosticar el comportamiento de esta criptomoneda constantemente, para eso se utilizará un modelo de Series de Tiempo Univariado llamado `ARIMA` que para una correcta aplicación sigue los pasos de una metodología de 5 pasos `Metodología Box Jenkins`
+
+- Pruebas de raíz unitarias
+- Identifiación del orden AR() I() MA() con la ayuda de las funciones de Auto-Correlación y Auto-Correlación Parcial 
+- Estimación de un modelo ARIMA significativo 
+- Pruebas de ruido blanco en los residuos
+- Pronosticar
+```{r echo=F, message=FALSE, results='hide'}
+library(astsa)
+library(stats)
+library(tseries)
+library(forecast)
+library(timeSeries)
+bitcoin<-ts(`BTCUSD=X`$`BTCUSD=X.Close`)
+```
+
+```{r echo=F, message=FALSE,results='hide', fig.show='hold',fig.width=14, fig.height=10}
+arimabitcoin<- sarima(bitcoin, 1,0,0)
+```
+##Pronóstico para los siguientes 30 días 
+```{r echo=F, message=FALSE,results='hide', fig.show='hold',fig.width=14, fig.height=10}
+mod1 <- arima(bitcoin, order = c(0,0,0), season = list( order = c( 1,1,1), period=12))
+plot(forecast(mod1, h = 30), main = "pronósticos 30 días")
+```
+
+## Aprende practicando con nuestros cursos:
+
+
+[Curso de Estadística Aplicada con R](https://drive.google.com/open?id=19OeeZMSIreqyoBLNg9LUZjPqHlGXQT3H)
+
+
+
+[Curso de Pronósticos en Series Temporales](https://drive.google.com/open?id=1HQcUqaUXjkWZsrAg-4M7XOpzfoSBgnsN)
+
+
+
+
