@@ -9,11 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Data World Bolivia (Departamento de Investigación DWB-DI)" />
 
-<meta name="date" content="2019-01-11" />
 
-<title>team.utf8.md</title>
+<title>MWE</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -310,131 +308,14 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Metodología Box Jenkins para pronósticar el precio del Bitcoin</h1>
-<h4 class="author"><em>Data World Bolivia (Departamento de Investigación DWB-DI)</em></h4>
-<h4 class="date"><em>2019-01-11</em></h4>
+<h1 class="title toc-ignore">MWE</h1>
 
 </div>
 
 
-<script>
-  $(document).ready(function() {
-    $head = $('#header');
-    $head.prepend('<div class="knitr source"><img src="DWB.png" width="220px" align="right"   ></div>')
-  });
-</script>
-<p>Los modelos de series de tiempo univariados son regresiones de una variable en función a su propio pasado, la cuestión es poder identificar los rezagos adecuados de la variable identificando momentos del pasado que explican mejor a la variable: <span class="math inline">\(Y_{t} = a_{0} + a_{1}Y_{t-1} + a_{2}Y_{t-2} + \epsilon_{t}\)</span></p>
-<div id="mineria-de-datos" class="section level2">
-<h2>Mineria de Datos</h2>
-<p>Muchos lenguajes de programación como <code>R</code>,<code>Python</code> y programas estadísticos como <code>Stata</code> nos permiten escribir codigo para poder obtener muchas bases de datos en tiempo real de variables financieras, precios de materias primas, tipos de cambio, variables macroeconómicas.</p>
-</div>
-<div id="base-de-datos-bitcoin-2018" class="section level2">
-<h2>Base de Datos Bitcoin 2018</h2>
-<p>En el caso de utilizar <code>R</code> para poder minar datos del <code>Bitcoin</code> en el 2018 debes escribir el siguiente código :</p>
-<pre><code>library(quantmod) 
-  getSymbols(&quot;BTCUSD=X&quot;,src=&quot;yahoo&quot;,from = &quot;2018-01-01&quot;, 
-       to = Sys.Date())
-       </code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">BTCUSD=X.Open</th>
-<th align="right">BTCUSD=X.High</th>
-<th align="right">BTCUSD=X.Low</th>
-<th align="right">BTCUSD=X.Close</th>
-<th align="right">BTCUSD=X.Adjusted</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">13850.49</td>
-<td align="right">12877.67</td>
-<td align="right">13921.53</td>
-<td align="right">13444.87</td>
-<td align="right">13444.87</td>
-</tr>
-<tr class="even">
-<td align="right">13444.87</td>
-<td align="right">12934.17</td>
-<td align="right">15306.13</td>
-<td align="right">14754.14</td>
-<td align="right">14754.14</td>
-</tr>
-<tr class="odd">
-<td align="right">14754.09</td>
-<td align="right">14579.70</td>
-<td align="right">15435.01</td>
-<td align="right">15156.61</td>
-<td align="right">15156.61</td>
-</tr>
-<tr class="even">
-<td align="right">15156.50</td>
-<td align="right">14244.67</td>
-<td align="right">15408.65</td>
-<td align="right">15180.08</td>
-<td align="right">15180.08</td>
-</tr>
-<tr class="odd">
-<td align="right">15180.08</td>
-<td align="right">14832.35</td>
-<td align="right">17126.95</td>
-<td align="right">16954.79</td>
-<td align="right">16954.79</td>
-</tr>
-<tr class="even">
-<td align="right">16228.26</td>
-<td align="right">13902.31</td>
-<td align="right">16302.92</td>
-<td align="right">14976.18</td>
-<td align="right">14976.18</td>
-</tr>
-<tr class="odd">
-<td align="right">14976.18</td>
-<td align="right">14221.55</td>
-<td align="right">15390.27</td>
-<td align="right">14468.49</td>
-<td align="right">14468.49</td>
-</tr>
-<tr class="even">
-<td align="right">14468.09</td>
-<td align="right">13450.53</td>
-<td align="right">14919.50</td>
-<td align="right">14919.50</td>
-<td align="right">14919.50</td>
-</tr>
-<tr class="odd">
-<td align="right">14920.36</td>
-<td align="right">12825.96</td>
-<td align="right">14979.95</td>
-<td align="right">13308.07</td>
-<td align="right">13308.07</td>
-</tr>
-<tr class="even">
-<td align="right">13308.07</td>
-<td align="right">12851.92</td>
-<td align="right">14129.08</td>
-<td align="right">13841.19</td>
-<td align="right">13841.19</td>
-</tr>
-</tbody>
-</table>
-<p>Una correcta visualización de los datos nos permite conocer todo el comportamiento de la variable. Este año el bitcoin sufrió una caída constante.</p>
-<pre class="r"><code>chartSeries(na.locf(`BTCUSD=X`), theme=&quot;white&quot;,TA=&quot;addVo();addBBands();addCCI()&quot;)</code></pre>
-<p><img src="team_files/figure-html/unnamed-chunk-3-1.png" width="1344" /></p>
-<p>El bitcoin tuvo una cotizacióin de casi 20.000 $ a inicios del 2018 y cierra el año con un promedio de 3.700$ .La revolución financiera que significa el bitcoin está en sus precios mínimo, es importante pronosticar el comportamiento de esta criptomoneda constantemente, para eso se utilizará un modelo de Series de Tiempo Univariado llamado <code>ARIMA</code> que para una correcta aplicación sigue los pasos de una metodología de 5 pasos <code>Metodología Box Jenkins</code></p>
-<ul>
-<li>Pruebas de raíz unitarias</li>
-<li>Identifiación del orden AR() I() MA() con la ayuda de las funciones de Auto-Correlación y Auto-Correlación Parcial</li>
-<li>Estimación de un modelo ARIMA significativo</li>
-<li>Pruebas de ruido blanco en los residuos</li>
-<li>Pronosticar</li>
-</ul>
-<p><img src="team_files/figure-html/unnamed-chunk-5-1.png" width="1344" /> ##Pronóstico para los siguientes 30 días <img src="team_files/figure-html/unnamed-chunk-6-1.png" width="1344" /></p>
-</div>
-<div id="aprende-practicando-con-nuestros-cursos" class="section level2">
-<h2>Aprende practicando con nuestros cursos:</h2>
-<p><a href="https://drive.google.com/open?id=19OeeZMSIreqyoBLNg9LUZjPqHlGXQT3H">Curso de Estadística Aplicada con R</a></p>
-<p><a href="https://drive.google.com/open?id=1HQcUqaUXjkWZsrAg-4M7XOpzfoSBgnsN">Curso de Pronósticos en Series Temporales</a></p>
+<div id="use-defined-by-symbol" class="section level2">
+<h2>Use “Defined by” Symbol</h2>
+<p><span class="math display">\[sin(x) \coloneqq \frac{opposite}{hypothenuse}\]</span></p>
 </div>
 
 
