@@ -104,6 +104,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -118,7 +121,6 @@ body {
   padding-top: 56px;
   margin-top: -56px;
 }
-
 .section h2 {
   padding-top: 56px;
   margin-top: -56px;
@@ -138,6 +140,43 @@ body {
 .section h6 {
   padding-top: 56px;
   margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -159,18 +198,77 @@ $(document).ready(function () {
 });
 </script>
 
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -225,8 +323,8 @@ $(document).ready(function () {
 
 <p>Este es el citio para las visualizaciones.</p>
 <p><strong>Las visualizaciones son automáticas e iteractivas</strong></p>
-<p><strong><em>el código puede ocultarse</em></strong> <div id="htmlwidget-2e6ac0f59bf6b1faa200" style="width:672px;height:480px;" class="dygraphs html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2e6ac0f59bf6b1faa200">{"x":{"attrs":{"title":"Actividad Económica en Bolivia(millones de dólares)","labels":["year","Comercio","Servicios","Industria"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60,"drawAxis":true},"y":{"drawAxis":true}},"stackedGraph":true,"fillGraph":false,"fillAlpha":0.15,"stepPlot":false,"drawPoints":false,"pointSize":1,"drawGapEdgePoints":false,"connectSeparatedPoints":false,"strokeWidth":1,"strokeBorderColor":"white","colorValue":0.5,"colorSaturation":1,"includeZero":false,"drawAxesAtZero":false,"logscale":false,"axisTickSize":3,"axisLineColor":"black","axisLineWidth":0.3,"axisLabelColor":"black","axisLabelFontSize":14,"axisLabelWidth":60,"drawGrid":true,"gridLineWidth":0.3,"rightGap":5,"digitsAfterDecimal":2,"labelsKMB":false,"labelsKMG2":false,"labelsUTC":false,"maxNumberWidth":6,"animatedZooms":false,"mobileDisableYTouch":true,"disableZoom":false,"showRangeSelector":true,"rangeSelectorHeight":60,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel"},"scale":"yearly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1976-01-01T00:00:00.000Z","1977-01-01T00:00:00.000Z","1978-01-01T00:00:00.000Z","1979-01-01T00:00:00.000Z","1980-01-01T00:00:00.000Z","1981-01-01T00:00:00.000Z","1982-01-01T00:00:00.000Z","1983-01-01T00:00:00.000Z","1984-01-01T00:00:00.000Z","1985-01-01T00:00:00.000Z","1986-01-01T00:00:00.000Z","1987-01-01T00:00:00.000Z","1988-01-01T00:00:00.000Z","1989-01-01T00:00:00.000Z","1990-01-01T00:00:00.000Z","1991-01-01T00:00:00.000Z","1992-01-01T00:00:00.000Z","1993-01-01T00:00:00.000Z","1994-01-01T00:00:00.000Z","1995-01-01T00:00:00.000Z","1996-01-01T00:00:00.000Z","1997-01-01T00:00:00.000Z","1998-01-01T00:00:00.000Z","1999-01-01T00:00:00.000Z","2000-01-01T00:00:00.000Z","2001-01-01T00:00:00.000Z","2002-01-01T00:00:00.000Z","2003-01-01T00:00:00.000Z","2004-01-01T00:00:00.000Z","2005-01-01T00:00:00.000Z","2006-01-01T00:00:00.000Z","2007-01-01T00:00:00.000Z","2008-01-01T00:00:00.000Z","2009-01-01T00:00:00.000Z","2010-01-01T00:00:00.000Z","2011-01-01T00:00:00.000Z","2012-01-01T00:00:00.000Z","2013-01-01T00:00:00.000Z","2014-01-01T00:00:00.000Z","2015-01-01T00:00:00.000Z","2016-01-01T00:00:00.000Z","2017-01-01T00:00:00.000Z"],[5006.91789340892,5151.69963094259,4911.06493398101,4811.93305158166,4308.07884726207,4265.20829348589,5182.99650832464,4453.55020595519,4200.0306298194,3496.76012622577,3824.63323124008,3634.82474134123,3593.40056338983,4063.19966466504,4349.21055287394,4748.998914914,4893.54221273936,4931.68363571647,5313.42050161424,5661.84397417584,5922.83086626554,6292.73771793883,6846.44524923964,5808.71621664308,6147.10340614749,6199.89459941996,6933.15315931272,7498.84472656703,8638.01591729407,10617.4900061894,12261.1592980477,13082.9503361011,15129.8295088308,12950.534491348,14837.7562101843,17050.5257203679,18460.3036885211,18852.0303156075,20868.6826353232,17434.3173777648,15091.9814159578,15809.7728221398],[660.642513419215,686.633180108122,744.825931332179,1050.33842900812,702.553684603365,646.574230557318,481.72886184516,545.26681330392,477.474076011186,531.804168456498,753.568648935084,769.817890198078,714.50671524383,833.185552550426,873.354503095719,858.968720791883,839.670458810762,911.481056484962,969.964850555814,919.791126096053,874.262615523166,1168.19756269199,1176.92610706942,1198.13380893256,1282.00982182164,1231.62189498204,1429.26369877822,1819.7723006634,1925.76864983047,2201.22345902221,2172.13023299062,2082.68763764643,1933.34691671381,1885.29341445405,1856.50790183,2241.8853166084,2444.41523268211,2683.77537683624,3132.97317045942,3171.93755642483,3234.44178311977,3263.31786517154],[1114.73454815123,1148.19970642163,1154.10149858957,1217.82596941925,1185.00632250665,1358.62431493611,665.1795590247,1020.42194334924,962.084286508691,1338.37239846867,1534.02076842776,1423.58906448261,1528.73515035262,1511.6787777846,1579.67015315896,1738.1052181644,1708.01769753132,1753.00694709164,1811.47856107783,1904.36647797946,1951.32046498838,1810.43345107913,1832.32161428113,1787.80990168771,1785.05314141645,1829.32035330278,1831.32933854533,1844.76780868335,1880.11794774097,1825.0359171435,1864.00053936574,1963.41087146176,2039.13567636028,2192.17862867311,2214.51779326465,2137.18960734982,2219.66035552793,2304.04171297915,2383.47901960738,2615.47201524413,2939.19547370298,2925.68555287113]],"fixedtz":false,"tzone":"UTC"},"evals":["attrs.interactionModel"],"jsHooks":[]}</script></p>
+<p><strong><em>el código puede ocultarse</em></strong> <div id="htmlwidget-e434b82235e32e4fd616" style="width:672px;height:480px;" class="dygraphs html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e434b82235e32e4fd616">{"x":{"attrs":{"title":"Actividad Económica en Bolivia(millones de dólares)","labels":["year","Comercio","Servicios","Industria"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60,"drawAxis":true},"y":{"drawAxis":true}},"stackedGraph":true,"fillGraph":false,"fillAlpha":0.15,"stepPlot":false,"drawPoints":false,"pointSize":1,"drawGapEdgePoints":false,"connectSeparatedPoints":false,"strokeWidth":1,"strokeBorderColor":"white","colorValue":0.5,"colorSaturation":1,"includeZero":false,"drawAxesAtZero":false,"logscale":false,"axisTickSize":3,"axisLineColor":"black","axisLineWidth":0.3,"axisLabelColor":"black","axisLabelFontSize":14,"axisLabelWidth":60,"drawGrid":true,"gridLineWidth":0.3,"rightGap":5,"digitsAfterDecimal":2,"labelsKMB":false,"labelsKMG2":false,"labelsUTC":false,"maxNumberWidth":6,"animatedZooms":false,"mobileDisableYTouch":true,"disableZoom":false,"showRangeSelector":true,"rangeSelectorHeight":60,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel"},"scale":"yearly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1976-01-01T00:00:00.000Z","1977-01-01T00:00:00.000Z","1978-01-01T00:00:00.000Z","1979-01-01T00:00:00.000Z","1980-01-01T00:00:00.000Z","1981-01-01T00:00:00.000Z","1982-01-01T00:00:00.000Z","1983-01-01T00:00:00.000Z","1984-01-01T00:00:00.000Z","1985-01-01T00:00:00.000Z","1986-01-01T00:00:00.000Z","1987-01-01T00:00:00.000Z","1988-01-01T00:00:00.000Z","1989-01-01T00:00:00.000Z","1990-01-01T00:00:00.000Z","1991-01-01T00:00:00.000Z","1992-01-01T00:00:00.000Z","1993-01-01T00:00:00.000Z","1994-01-01T00:00:00.000Z","1995-01-01T00:00:00.000Z","1996-01-01T00:00:00.000Z","1997-01-01T00:00:00.000Z","1998-01-01T00:00:00.000Z","1999-01-01T00:00:00.000Z","2000-01-01T00:00:00.000Z","2001-01-01T00:00:00.000Z","2002-01-01T00:00:00.000Z","2003-01-01T00:00:00.000Z","2004-01-01T00:00:00.000Z","2005-01-01T00:00:00.000Z","2006-01-01T00:00:00.000Z","2007-01-01T00:00:00.000Z","2008-01-01T00:00:00.000Z","2009-01-01T00:00:00.000Z","2010-01-01T00:00:00.000Z","2011-01-01T00:00:00.000Z","2012-01-01T00:00:00.000Z","2013-01-01T00:00:00.000Z","2014-01-01T00:00:00.000Z","2015-01-01T00:00:00.000Z","2016-01-01T00:00:00.000Z","2017-01-01T00:00:00.000Z","2018-01-01T00:00:00.000Z"],[5007.12486649377,5151.58270395927,4911.08825785629,4811.95590477725,4311.21345864635,4293.65186249816,5175.18704742926,4456.3541510303,4199.66575860882,3496.77663684799,3825.65685989394,3655.29825088518,3593.41763415928,4063.21896725697,4349.23121418607,4749.02147545635,4893.56545994753,4931.7070641189,5313.4457434916,5661.87087126997,5922.85900320118,6292.76761214984,6846.47777388761,5808.74381146686,6147.13260850976,6199.92405257147,6933.18597355781,7498.88035049687,8638.05695295809,10617.5404455214,12261.2175457771,13083.012487822,15129.9013844335,12950.5960140156,14837.8266982668,17050.6067204091,18460.3913858381,18852.1198738567,20868.7817738589,17434.4002010424,15092.0531117598,15809.8479278739,null],[660.669822678502,686.636440230563,744.829468696755,1050.34341735466,704.19758591695,648.652624870719,482.302591922579,545.291061477651,477.474822445973,531.806679471668,753.770334800124,774.153965536957,714.510109571625,833.189510672609,873.358652044079,858.972801399302,839.67444774007,911.485386556916,969.969458460232,919.795495645729,874.266768785601,1168.20311231856,1176.93169816173,1198.13950077393,1282.01591212349,1231.62774591155,1429.27046340728,1819.78094565381,1925.77779836597,2201.23391613033,2172.14507063847,2082.70951160693,1933.36162994438,1885.30237070834,1856.50790183,2241.88384765427,2444.4268450944,2683.78812635023,3132.98805392753,3171.95262499673,3234.45714862358,3312.0668820891,null],[1114.78062840521,1148.20515805394,1154.10697970615,1217.83175321025,1160.7113157894,1345.77147929046,668.564833878421,1022.65877933978,962.267997976091,1338.37871785012,1534.43133527672,1431.60757056541,1528.74241274512,1511.68595914928,1579.67765752273,1738.11347518806,1708.02581162153,1753.0152749073,1811.48716666808,1904.37552484205,1951.32973491007,1810.44205170449,1832.33031888817,1787.81839483789,1785.0616214704,1829.32904365205,1831.33800612967,1844.77657241715,1880.12687940874,1825.04458713918,1864.00939446634,1963.42019881999,2039.14536345594,2192.18904281294,2214.52831352868,2137.19976025942,2219.67090022216,2304.05265853454,2383.49034253676,2615.4844402769,2939.20943661289,2925.69945160096,null]],"fixedtz":false,"tzone":"UTC"},"evals":["attrs.interactionModel"],"jsHooks":[]}</script></p>
 
 
 
