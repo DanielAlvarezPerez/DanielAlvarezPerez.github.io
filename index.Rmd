@@ -1,6 +1,8 @@
+
 ---
-title: "Data World Bolivia es una empresa de Data Science dedicada a la obtención, análisis y visualización de datos"
+title: "DWB"
+css: background.css
+
 ---
 
 
-## Visualizaciones de datos 
